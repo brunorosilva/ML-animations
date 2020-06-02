@@ -1,6 +1,10 @@
 # Math Animations
-Some ready to go animations for you to make your own Statistical, Mathematical or ML animations.<br>
-Here is an example of how you should use it
+PT-BR<br><br>
+Algumas animações envolvendo conceitos estatísticos, matemáticos e algoritmos de Aprendizado de Máquina<br>
+Sou muito aberto para novas ideias e abaixo tem um exemplo sobre como criar um gif de regressão linear simplificado, mas pode ser altamente personalizado.<br><br>
+EN-US<br><br>
+Some ready to go animations for you to make your own Statistical, Mathematical or Machine Learning animations.<br>
+I'm very open about new ideas Here is an example of how you should use it:
 ```
 import LinearRegressionAnimation
 ling = LinearRegressionAnimation()
