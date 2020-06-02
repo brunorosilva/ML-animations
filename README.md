@@ -1,6 +1,6 @@
 # Math Animations
-Some ready to go animations for you to make your own Statistical, Mathematical or ML animations.
-This gif was made with the following code using Tensorflow v1, Matplotlib, sklearn and Celluloid
+Some ready to go animations for you to make your own Statistical, Mathematical or ML animations.<br>
+Here is an example of how you should use it
 ```
 import LinearRegressionAnimation
 ling = LinearRegressionAnimation()
