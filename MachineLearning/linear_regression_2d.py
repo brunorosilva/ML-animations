@@ -1,118 +1,80 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 from celluloid import Camera
 import tensorflow as tf
+from sklearn.datasets import make_regression
 
 class LinearRegressionAnimation():
 
 
+    #tf.enable_eager_execution()
     """
     This object creates a mp4, GIF or HTML5 video of the Linear Regression Algorithm
     """
-    def __init__(self, X, Y, W = tf.Variable(np.random.randn(), name="weight"), b = tf.Variable(np.random.randn(), name="bias")):
-        self.X          = X
-        self.Y          = Y
-        self.W          = W
-        self.b          = b
         
-    def linear_regression(self, x):
-        return self.W * x + self.b
-    
-    def mean_square(self, y_pred, y_true):
-        return tf.reduce_mean(tf.square(y_pred - y_true))
-
-    def run_optimization(self):
-        # Wrap computation inside a GradientTape for automatic differentiation.
-        with tf.GradientTape() as g:
-            pred = linear_regression(X)
-            loss = mean_square(pred, Y) 
-
-        # Compute gradients.
-        gradients = g.gradient(loss, [W, b])
         
-        # Update W and b following gradients.
-        tf.keras.optimizers.SGD(learning_rate).apply_gradients(zip(gradients, [W, b]))
+    def __init__(self, train_X=np.nan, train_Y=np.nan, W = tf.Variable(np.random.randn(), name="weight"), b = tf.Variable(np.random.randn(), name="bias"), alpha=0.1, size=100):
+        if np.isnan(train_X):
+            print("Taking random X")
+            self.train_X, self.train_Y = make_regression(100, 1, noise=2)
+        else:
+            self.train_X = train_X
+            self.train_Y = train_Y
+        self.X = tf.placeholder("float")
+        self.Y = tf.placeholder("float")
 
+        self.W = W
+        self.b = b
+        self.alpha = alpha
+        self.n_samples = size
 
-
-
-    def create_training_animation(
-        self,
+        
+    def animate(self,
         frames=20,
         line_color='black', 
-        dot_color='red', 
-        alpha=0.01, 
-        epochs=100, 
-        plot_size=(9,6), 
-        rmse_on_title=False,
-        extension='mp4'):
+        dot_color='red',
+        epochs=1000, 
+        plot_size=(9,6)):
+    
 
+        pred = tf.add(tf.multiply(self.X, self.W), self.b)
 
-        fig, ax = plt.subplots(figsize=plot_size) # criando o plot vazio
-        camera = Camera(fig)
+        cost = tf.reduce_sum(tf.pow(pred-self.Y, 2))/(2*self.n_samples)
+        
+        optimizer = tf.train.GradientDescentOptimizer(self.alpha).minimize(cost)
 
+        init = tf.global_variables_initializer()
 
-        for _ in range(epochs):
-            y_pred = self.theta_1 + self.theta_2 * self.x
-            error = y_pred - self.y
-            mean_sq_er = np.sum(error**2)
-            mean_sq_er = mean_sq_er / len(self.y)
-            self.theta_1 = self.theta_1 - alpha * 2 * np.sum(error)/len(self.y)
-            self.theta_2 = self.theta_2 - alpha * 2 * np.sum(error * self.x)/len(self.y)
+        fig, ax = plt.subplots(figsize=plot_size)
+        cam = Camera(fig)
 
+        with tf.Session() as sess:
 
-            #ax.plot(self.x, y_pred)
-            #ax.legend(j)
-            ax.text(0.5, 1.01, "ok", transform=ax.transAxes) # fazendo o título
-            print(mean_sq_er)
-            #print(y_pred)
-            camera.snap() # a foto da câmera
-        anim = camera.animate() # sequenciando as fotos
-        return anim
+            sess.run(init)
 
-    def save_anim(self, animation_name="animation", extension='mp4'):
-        self.anim.save(animation_name + "." + extension)
+            for epoch in range(epochs):
+                for (x, y) in zip(self.train_X, self.train_Y):
+                    sess.run(optimizer, feed_dict={self.X: x, self.Y: y})
 
+                if epoch % 10 == 0:
+                    c = sess.run(cost, feed_dict={self.X:self.train_X, self.Y:self.train_Y})
+                    print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}".format(c), \
+                        "W=", sess.run(self.W), "b=", sess.run(self.b))
+                    
+                    ax.scatter(self.train_X, self.train_Y)
+                    ax.plot(self.train_X, sess.run(self.W) * self.train_X + sess.run(self.b))
+                    cam.snap()
+
+            anim = cam.animate()
+            anim.save("uhuhuh.mp4")
+
+            print("Optimization Finished!")
+            training_cost = sess.run(cost, feed_dict={self.X: self.train_X, self.Y: self.train_Y})
+            print("Training cost=", training_cost, "W=", sess.run(self.W), "b=", sess.run(self.b), '\n')
 
     def show_anim(self):
         pass
 
 
-
-
-
-x = [1,2,3,4,5,6,7,8]
-y = [2,4,5,7,9,10,11,12]
-
-an = LinearRegressionAnimation(x, y)
-an.create_training_animation()
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+an = LinearRegressionAnimation()
+an.animate()
