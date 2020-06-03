@@ -6,7 +6,7 @@ EN-US<br><br>
 Some ready to go animations for you to make your own Statistical, Mathematical or Machine Learning animations.<br>
 I'm very open about new ideas here is an example of how you can use it:
 ```
-import LinearRegressionAnimation
+frpm linear_regression_2d import LinearRegressionAnimation
 ling = LinearRegressionAnimation()
 animation = ling.animate()
 animation.save("Linear_Regression.gif")
