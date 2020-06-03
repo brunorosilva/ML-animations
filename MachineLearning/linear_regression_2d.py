@@ -1,15 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from celluloid import Camera
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from sklearn.datasets import make_regression
 
+tf.disable_v2_behavior()
 class LinearRegressionAnimation():
     """
     This object creates a mp4, GIF or HTML5 video of the Linear Regression Algorithm
     """        
         
-    def __init__(self, train_X=np.nan, train_Y=np.nan, W = tf.Variable(np.random.randn(), name="weight"), b = tf.Variable(np.random.randn(), name="bias"), alpha=0.01, size=100, noise=2):
+    def __init__(
+        self, train_X=np.nan, train_Y=np.nan, W = np.random.randn(), b = np.random.randn(), 
+        alpha=0.01, size=100, noise=2):
         if np.isnan(train_X):
             print("Taking random X")
             self.train_X, self.train_Y = make_regression(size, 1, noise=noise)
@@ -19,8 +22,8 @@ class LinearRegressionAnimation():
         self.X = tf.placeholder("float")
         self.Y = tf.placeholder("float")
 
-        self.W = W
-        self.b = b
+        self.W = tf.Variable(float(W), name="weight")
+        self.b = tf.Variable(float(b), name="bias")
         self.alpha = alpha
         self.n_samples = size
     
@@ -32,7 +35,7 @@ class LinearRegressionAnimation():
         plot_size=(9,6)):
     
 
-        pred = tf.add(tf.multiply(self.X, self.W), self.b)
+        pred = self.X * self.W + self.b
 
         cost = tf.reduce_sum(tf.pow(pred-self.Y, 2))/(2*self.n_samples)
         
@@ -69,6 +72,6 @@ class LinearRegressionAnimation():
         return anim
 
 
-ling = LinearRegressionAnimation()
+ling = LinearRegressionAnimation(W=-90, b = 50)
 animation = ling.animate()
 animation.save("Linear_Regression.mp4")
