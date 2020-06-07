@@ -6,6 +6,8 @@ import tensorflow.compat.v1 as tf
 from celluloid import Camera
 from sklearn.datasets import make_regression
 
+__author__ = "Bruno Rodrigues Silva"
+
 tf.disable_v2_behavior()
 class LinearRegressionAnimation():
     """
@@ -74,7 +76,7 @@ class LinearRegressionAnimation():
                     b_atual = sess.run(self.b)
                     eq_reta = 'Y = ' + str(w_atual) + ' * X + ' + str(b_atual) # equacao da reta atual
 
-                    print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}".format(c),
+                    print("Época:", '%04d' % (epoch+1), "custo=", "{:.9f}".format(c),
                         "W=", str(w_atual), "b=", str(b_atual)) # vamos ver como estão os indicadores
                     
                     linha, = ax.plot(self.train_X, sess.run(self.W) * self.train_X + sess.run(self.b), c=line_color, label=eq_reta)
@@ -88,9 +90,9 @@ class LinearRegressionAnimation():
 
             anim = cam.animate()
             
-            print("Optimization Finished!")
+            print("Optimização terminada!")
             training_cost = sess.run(cost, feed_dict={self.X: self.train_X, self.Y: self.train_Y})
-            print("Training cost=", training_cost, "W=", sess.run(self.W), "b=", sess.run(self.b), '\n')
+            print("Custo=", training_cost, "W=", sess.run(self.W), "b=", sess.run(self.b), '\n')
 
         return anim
     
