@@ -27,6 +27,10 @@ def anim_svc(svc, X, y, h=0.05, pad=0.25):
 fig = plt.figure(figsize=(10, 5))
 cam = Camera(fig)
 
+x = np.random.uniform(-4*np.pi, 4*np.pi, size=2000)
+y = np.random.uniform(-2, 2, size=2000)
+z = [1 if yy>np.sin(xx) else -1 for xx, yy in zip(x, y)]
+
 j = 0
 for c in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]:
   
