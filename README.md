@@ -1,4 +1,4 @@
-# Math Animations
+# Machine Learning Animations
 ## Descrição PT-BR<br><br>
 Algumas animações envolvendo conceitos estatísticos, matemáticos e algoritmos de Aprendizado de Máquina<br>
 Sou muito aberto para novas ideias e abaixo tem um exemplo sobre como criar um gif de regressão linear simplificado, mas pode ser altamente personalizado.<br><br>
