@@ -77,4 +77,4 @@ x_train, x_test, y_train, y_test = train_test_split(\
                 x, y, test_size=0.3, random_state=45)
 anim = KNeighborsClassifierAnimation()
 k = anim.animate_training(x_train, y_train, x_test, y_test)
-k.save("..\\animations\\knn_classification.mp4")
+k.save("..\\animations\\knn_classification.gif", writer='imagemagick')

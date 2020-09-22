@@ -35,7 +35,7 @@ class LogisticRegressionAnimation(LogisticRegression):
         Z = self.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1] # creating the predicition proba for each spot in meshgrid
         Z = Z.reshape(xx.shape)
         ax.contourf(xx, yy, Z, cmap=cm, alpha=.8) # contourplotting
-        ax.set_title("{:.3%} of the traning data used".format(len(x)/train_size))
+        ax.text(0.4, 1.01, "{:.3%} of the traning data used".format(len(x)/train_size),transform=ax.transAxes)
         sns.scatterplot(full_x[:,0], full_x[:,1], hue=full_y, legend=False, palette=['#FF0000', '#0000FF'])
 
         cam.snap()
@@ -79,4 +79,4 @@ x_train, x_test, y_train, y_test = train_test_split(\
                 x, y, test_size=0.3, random_state=45)
 anim = LogisticRegressionAnimation()
 k = anim.animate_training(x_train, y_train, x_test, y_test)
-k.save("..\\animations\\logistic_regression.mp4")
+k.save("..\\animations\\logistic_regression.gif", writer='imagemagick')
