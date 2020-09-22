@@ -1,4 +1,4 @@
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from celluloid import Camera
@@ -14,14 +14,14 @@ import numpy as np
 # and I'm able to call things like I'm used to (fit, score, etc.)
 # and also I just have to create two new functions -> animate_training
 # and plot_decision_boundary
-class LogisticRegressionAnimation(LogisticRegression):
+class KNeighborsClassifierAnimation(KNeighborsClassifier):
     """
-    Creates a 2D Logistic Regression decision boundary animation 
+    Creates a 2D KNeighborsClassifier decision boundary animation 
     with all chosen parameters this class is inherted from sklearn, 
     so you may chose whatever you like with the init params
     """
     def __init__(self):
-        super().__init__() # inheriting from LogisticRegression
+        super().__init__() # inheriting from KNeighborsClassifier
         
     
     def plot_decision_boundary(self, x, y, fig, ax, train_size, cam, full_x, full_y):
@@ -35,7 +35,7 @@ class LogisticRegressionAnimation(LogisticRegression):
         Z = self.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1] # creating the predicition proba for each spot in meshgrid
         Z = Z.reshape(xx.shape)
         ax.contourf(xx, yy, Z, cmap=cm, alpha=.8) # contourplotting
-        ax.set_title("{:.3%} of the traning data used".format(len(x)/train_size))
+        ax.text(0.4, 1.01, "{:.3%} of the traning data used".format(len(x)/train_size),transform=ax.transAxes)
         sns.scatterplot(full_x[:,0], full_x[:,1], hue=full_y, legend=False, palette=['#FF0000', '#0000FF'])
 
         cam.snap()
@@ -52,7 +52,7 @@ class LogisticRegressionAnimation(LogisticRegression):
         shuffled_y_train = df_shuffled[[2]].values.ravel()
         
         # setting up celluloid 
-        fig, ax = plt.subplots(figsize=(5,5))
+        fig, ax = plt.subplots(figsize=(16, 9))
         cam = Camera(fig)
         
         # tqdm makes a progressbar
@@ -68,15 +68,13 @@ class LogisticRegressionAnimation(LogisticRegression):
 
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-import pandas as pd
-import numpy as np
 from sklearn.datasets import make_moons
-x, y = make_moons(n_samples=400, noise=0.70)
+
+x, y = make_moons(n_samples=400, noise=0.20)
 
 
 x_train, x_test, y_train, y_test = train_test_split(\
                 x, y, test_size=0.3, random_state=45)
-anim = LogisticRegressionAnimation()
+anim = KNeighborsClassifierAnimation()
 k = anim.animate_training(x_train, y_train, x_test, y_test)
-k.save("LR.mp4")
+k.save("..\\animations\\knn_classification.mp4")
